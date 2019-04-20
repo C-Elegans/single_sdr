@@ -20,10 +20,11 @@ class Top extends Component {
 
 object TopVerilog {
   def main(args: Array[String]) {
+    SpinalVerilog(new Top)
     SimConfig.withWave.doSim(new Top) { dut =>
       dut.clockDomain.forkStimulus(period = 10)
       for(i <- 0 to 256) {
-        dut.io.real_in #= round(511 * sin(2*3.1415* 10e6/100e6 * i))
+        dut.io.real_in #= round(511 * sin(2*3.1415* 24e6/100e6 * i))
         dut.clockDomain.waitRisingEdge()
       }
     }

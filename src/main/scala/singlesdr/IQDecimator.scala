@@ -23,7 +23,7 @@ class IQDecimator extends Component {
   )
   val io = new Bundle {
     val cpx_in = in(Complex(widthin))
-    val cpx_out = out(Complex(widthout))
+    val cpx_out = out(Reg(Complex(widthout)))
   }
 
   val delayline = Reg(Vec(Complex(widthin), coeffs.length)) 
@@ -34,22 +34,35 @@ class IQDecimator extends Component {
   }
   delayline(0).i := io.cpx_in.i.resized
   delayline(0).q := io.cpx_in.q.resized
-  io.cpx_out.q := delayline(coeffs.length - 1).q.resized
 
-  val mult_out = Vec(SInt(widthout), coeffs.length/2 + 1)
-  val sum = Vec(SInt(widthin + (1 bits)), coeffs.length/2 + 1)
+  val mult_out = Reg(Vec(SInt(widthout), coeffs.length/2 + 1))
+  val sum = Reg(Vec(SInt(widthin + (1 bits)), coeffs.length/2 + 1))
+  val sel = Reg(Bool) init(False)
+  sel := !sel
   for ( i <- 0 to coeffs.length/2 ) {
     if(i == coeffs.length/2)
-      sum(i) := delayline(i).i.resized
+      when(sel){
+        sum(i) := delayline(i).i.resized
+      }.otherwise{
+        sum(i) := delayline(i).q.resized
+      }
     else {
-      sum(i) := delayline(i).i.resize(11 bits) + delayline(coeffs.length-1 - i).i.resize(11 bits)
+      when(sel){
+        sum(i) := delayline(i).i.resize(11 bits) + delayline(coeffs.length-1 - i).i.resize(11 bits)
+      }.otherwise {
+        sum(i) := delayline(i).q.resize(11 bits) + delayline(coeffs.length-1 - i).q.resize(11 bits)
+      }
       printf("adding delayline(%d) and delayline(%d)\n", i, coeffs.length-1-i)
     }
 
     mult_out(i) := (sum(i).resized * S(round(coeffs(i) * 256.0))).resized
   }
-
-  io.cpx_out.i := mult_out(0) + mult_out(1) + mult_out(2) + mult_out(3)
+  // This will change depending on the number of pipeline stages
+  when(sel){
+    io.cpx_out.i := mult_out(0) + mult_out(1) + mult_out(2) + mult_out(3)
+  }.otherwise{
+    io.cpx_out.q := mult_out(0) + mult_out(1) + mult_out(2) + mult_out(3)
+  }
 
 
 

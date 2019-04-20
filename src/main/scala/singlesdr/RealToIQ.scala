@@ -23,8 +23,8 @@ class RealToIQ(width: BitCount) extends Component {
 class IQMultiplier(width: BitCount) extends Component {
   val io = new Bundle {
     val real_in = in SInt(width)
-    val complex_i = out(Reg(SInt(width)))
-    val complex_q = out(Reg(SInt(width)))
+    val complex_i = out(Reg(SInt(width))) init(0)
+    val complex_q = out(Reg(SInt(width))) init(0)
   }
   val accumulator = Reg(UInt(2 bits)) init(0)
 
