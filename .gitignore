@@ -1,0 +1,6 @@
+project/*
+simWorkspace/*
+target/*
+tmp/*
+*.log
+*~
