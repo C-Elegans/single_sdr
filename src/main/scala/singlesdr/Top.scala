@@ -9,11 +9,12 @@ import scala.math._
 class Top extends Component {
   val io = new Bundle {
     val real_in = in SInt(10 bits)
-    val complex_i = out SInt(18 bits)
-    val complex_q = out SInt(18 bits)
+    val complex_i = out SInt(12 bits)
+    val complex_q = out SInt(12 bits)
+    val iq_en = out Bool
   }
 
-  val realtoiq = new RealToIQ(10 bits)
+  val realtoiq = new RealToIQ(10 bits, 12 bits)
   io <> realtoiq.io
 
 }
@@ -24,7 +25,7 @@ object TopVerilog {
     SimConfig.withWave.doSim(new Top) { dut =>
       dut.clockDomain.forkStimulus(period = 10)
       for(i <- 0 to 256) {
-        dut.io.real_in #= round(511 * sin(2*3.1415* 24e6/100e6 * i))
+        dut.io.real_in #= round(511 * sin(2*3.1415* 26e6/100e6 * i))
         dut.clockDomain.waitRisingEdge()
       }
     }

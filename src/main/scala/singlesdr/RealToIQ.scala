@@ -3,11 +3,12 @@ package singlesdr
 import spinal.core._
 import spinal.lib._
 
-class RealToIQ(width: BitCount) extends Component {
+class RealToIQ(width: BitCount, widthout: BitCount) extends Component {
   val io = new Bundle {
     val real_in = in SInt(width)
-    val complex_i = out SInt(18 bits)
-    val complex_q = out SInt(18 bits)
+    val complex_i = out SInt(widthout)
+    val complex_q = out SInt(widthout)
+    val iq_en = out(Bool)
   }
   val multiplier = new IQMultiplier(width)
   val decimator = new IQDecimator
@@ -15,8 +16,12 @@ class RealToIQ(width: BitCount) extends Component {
   decimator.io.cpx_in.i := multiplier.io.complex_i
   decimator.io.cpx_in.q := multiplier.io.complex_q
 
-  io.complex_i := decimator.io.cpx_out.i
-  io.complex_q := decimator.io.cpx_out.q
+  val preshift = Complex(18 bits)
+  preshift := decimator.io.cpx_out
+
+  io.complex_i := preshift.i >> (preshift.i.getWidth - widthout.value)
+  io.complex_q := preshift.q >> (preshift.q.getWidth - widthout.value)
+  io.iq_en := decimator.io.out_en
 }
 
 

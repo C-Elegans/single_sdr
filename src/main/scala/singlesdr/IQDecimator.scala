@@ -24,7 +24,9 @@ class IQDecimator extends Component {
   val io = new Bundle {
     val cpx_in = in(Complex(widthin))
     val cpx_out = out(Reg(Complex(widthout)))
+    val out_en = out(Reg(Bool))
   }
+  io.out_en := False
 
   val delayline = Reg(Vec(Complex(widthin), coeffs.length)) 
   for (i <- 1 to coeffs.length - 1) {
@@ -62,11 +64,20 @@ class IQDecimator extends Component {
     mult_out(i) := mult.io.O.resized
 
   }
+
+  val out_buffer = Reg(Complex(widthout))
+  out_buffer.i init(0)
+  out_buffer.q init(0)
   // This will change depending on the number of pipeline stages
   when(sel){
-    io.cpx_out.i := mult_out(0) + mult_out(1) + mult_out(2) + mult_out(3)
+    out_buffer.i := mult_out(0) + mult_out(1) + mult_out(2) + mult_out(3)
   }.otherwise{
-    io.cpx_out.q := mult_out(0) + mult_out(1) + mult_out(2) + mult_out(3)
+    out_buffer.q := mult_out(0) + mult_out(1) + mult_out(2) + mult_out(3)
+  }
+
+  when(sel){
+    io.cpx_out := out_buffer
+    io.out_en := True
   }
 
 
