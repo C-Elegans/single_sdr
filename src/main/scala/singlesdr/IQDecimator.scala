@@ -55,7 +55,12 @@ class IQDecimator extends Component {
       printf("adding delayline(%d) and delayline(%d)\n", i, coeffs.length-1-i)
     }
 
-    mult_out(i) := (sum(i).resized * S(round(coeffs(i) * 256.0))).resized
+    val mult = new mult18x18
+    mult.io.A := sum(i).resized
+    mult.io.B := S(round(coeffs(i) * 256.0))
+    mult.io.en := True
+    mult_out(i) := mult.io.O.resized
+
   }
   // This will change depending on the number of pipeline stages
   when(sel){
