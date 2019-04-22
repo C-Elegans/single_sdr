@@ -6,8 +6,7 @@ import spinal.lib._
 class RealToIQ(width: BitCount, widthout: BitCount) extends Component {
   val io = new Bundle {
     val real_in = in SInt(width)
-    val complex_i = out SInt(widthout)
-    val complex_q = out SInt(widthout)
+    val complex_out = out(Complex(widthout))
     val iq_en = out(Bool)
   }
   val multiplier = new IQMultiplier(width)
@@ -19,8 +18,8 @@ class RealToIQ(width: BitCount, widthout: BitCount) extends Component {
   val preshift = Complex(18 bits)
   preshift := decimator.io.cpx_out
 
-  io.complex_i := preshift.i >> (preshift.i.getWidth - widthout.value)
-  io.complex_q := preshift.q >> (preshift.q.getWidth - widthout.value)
+  io.complex_out.i := preshift.i >> (preshift.i.getWidth - widthout.value)
+  io.complex_out.q := preshift.q >> (preshift.q.getWidth - widthout.value)
   io.iq_en := decimator.io.out_en
 }
 
