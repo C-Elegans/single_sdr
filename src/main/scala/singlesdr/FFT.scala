@@ -9,26 +9,28 @@ class fftmain extends BlackBox {
     val i_reset = in Bool
     val i_ce = in Bool
     val i_sample = in Bits(24 bits)
-    val o_result = out Bits(24 bits)
+    val o_result = out Bits(34 bits)
     val o_sync = out Bool
   }
   mapClockDomain(clock=io.i_clk, reset=io.i_reset)
   noIoPrefix()
-  addRTLPath("dblclockfft/fft-core/fftmain.v")
-  addRTLPath("dblclockfft/fft-core/fftstage.v")
-  addRTLPath("dblclockfft/fft-core/qtrstage.v")
-  addRTLPath("dblclockfft/fft-core/laststage.v")
-  addRTLPath("dblclockfft/fft-core/bitreverse.v")
-  addRTLPath("dblclockfft/fft-core/convround.v")
-  addRTLPath("dblclockfft/fft-core/hwbfly.v")
-  addRTLPath("dblclockfft/fft-core/")
+  addRTLPath("fft-core/fftmain.v")
+  addRTLPath("fft-core/fftstage.v")
+  addRTLPath("fft-core/qtrstage.v")
+  addRTLPath("fft-core/laststage.v")
+  addRTLPath("fft-core/bitreverse.v")
+  addRTLPath("fft-core/convround.v")
+  addRTLPath("fft-core/hwbfly.v")
+  addRTLPath("fft-core/")
+  addRTLPath("rtl/fftmult.v")
+  addRTLPath("rtl/mult18x18_0c.v")
 }
 
 class FFT extends Component {
   val io = new Bundle {
     val en = in Bool
     val sample_in = in(Complex(12 bits))
-    val sample_out = out(Complex(12 bits))
+    val sample_out = out(Complex(17 bits))
     val output_en = out Bool
   }
 

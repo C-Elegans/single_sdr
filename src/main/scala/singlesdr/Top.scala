@@ -9,7 +9,7 @@ import scala.math._
 class Top extends Component {
   val io = new Bundle {
     val real_in = in SInt(10 bits)
-    val complex_out = out(Complex(12 bits))
+    val complex_out = out(Complex(17 bits))
     val iq_en = out Bool
   }
 
