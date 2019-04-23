@@ -65,8 +65,8 @@ output ROB17,ROB16,ROB15,ROB14,ROB13,ROB12,ROB11,ROB10,ROB9;
 output ROB8,ROB7,ROB6,ROB5,ROB4,ROB3,ROB2,ROB1,ROB0;
 output ROC17,ROC16,ROC15,ROC14,ROC13,ROC12,ROC11,ROC10,ROC9;
 output ROC8,ROC7,ROC6,ROC5,ROC4,ROC3,ROC2,ROC1,ROC0;
-output P35,P34,P33,P32,P31,P30,P29,P28,P27,P26,P25,P24,P23,P22,P21,P20,P19,P18; 
-output P17,P16,P15,P14,P13,P12,P11,P10,P9,P8,P7,P6,P5,P4,P3,P2,P1,P0; 
+output P35,P34,P33,P32,P31,P30,P29,P28,P27,P26,P25,P24,P23,P22,P21,P20,P19,P18;
+output P17,P16,P15,P14,P13,P12,P11,P10,P9,P8,P7,P6,P5,P4,P3,P2,P1,P0;
 output SIGNEDP;
 
 parameter REG_INPUTA_CLK = "NONE";
@@ -96,20 +96,57 @@ parameter CLK2_DIV = "ENABLED";
 parameter CLK3_DIV = "ENABLED";
 
 
-    wire signed[17:0] a = {A17,A16,A15,A14,A13,A12,A11,A10,A9,A8,A7,A6,A5,A4,A3,A2,A1,A0};
-    wire signed [17:0] b = {B17,B16,B15,B14,B13,B12,B11,B10,B9,B8,B7,B6,B5,B4,B3,B2,B1,B0};
-    reg signed [35:0] 	o;
+   wire signed [17:0] a = {A17,A16,A15,A14,A13,A12,A11,A10,A9,A8,A7,A6,A5,A4,A3,A2,A1,A0};
+   wire signed [17:0] b = {B17,B16,B15,B14,B13,B12,B11,B10,B9,B8,B7,B6,B5,B4,B3,B2,B1,B0};
+   wire signed [35:0] o_wire;
 
-    always @(posedge CLK0)
-      if(RST0 == 1) begin
-	  o <= 36'b0;
-      end
-      else begin
-	  o <= a * b;
-      end
-    assign {P35,P34,P33,P32,P31,P30,P29,P28,P27,P26,P25,P24,P23,P22,P21,P20,
-	    P19,P18,P17,P16,P15,P14,P13,P12,P11,P10,
-	    P9,P8,P7,P6,P5,P4,P3,P2,P1,P0} = o;
-    
+   reg signed [35:0] pipe_wire;
+   reg signed [35:0]  o;
+   reg signed [35:0]  pipe1, pipe2;
+
+   reg signed [17:0]  a_pipe, b_pipe;
+
+   reg signed [17:0]  a_wire, b_wire;
+
+   always @(*) begin
+      if (REG_PIPELINE_CLK == "CLK0")
+	pipe_wire = pipe1;
+      else
+	pipe_wire = o_wire;
+      if (REG_OUTPUT_CLK == "CLK0")
+	o = pipe2;
+      else
+	o = pipe_wire;
+      if (REG_INPUTA_CLK == "CLK0")
+	a_wire = a_pipe;
+      else
+	a_wire = a;
+      if (REG_INPUTB_CLK == "CLK0")
+	b_wire = b_pipe;
+      else
+	b_wire = b;
+   end
+
+
+
+
+
+   assign o_wire = a_wire * b_wire;
+   always @(posedge CLK0 or posedge RST0)
+     if(RST0 == 1) begin
+	pipe1 <= 36'b0;
+	pipe2 <= 36'b0;
+	a_pipe <= 18'b0;
+	b_pipe <= 18'b0;
+     end
+     else begin
+	pipe1 <= o_wire;
+	pipe2 <= pipe_wire;
+	a_pipe <= a;
+	b_pipe <= b;
+     end
+   assign {P35,P34,P33,P32,P31,P30,P29,P28,P27,P26,P25,P24,P23,P22,P21,P20,
+	   P19,P18,P17,P16,P15,P14,P13,P12,P11,P10,
+	   P9,P8,P7,P6,P5,P4,P3,P2,P1,P0} = o;
+
 endmodule // MULT18X18D
-

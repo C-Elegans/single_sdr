@@ -57,7 +57,7 @@ class IQDecimator extends Component {
       printf("adding delayline(%d) and delayline(%d)\n", i, coeffs.length-1-i)
     }
 
-    val mult = new mult18x18
+    val mult = new mult18x18_1c
     mult.io.A := sum(i).resized
     mult.io.B := S(round(coeffs(i) * 256.0))
     mult.io.en := True

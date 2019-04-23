@@ -1,4 +1,4 @@
-module mult18x18(/*AUTOARG*/
+module mult18x18_0c(/*AUTOARG*/
     // Outputs
     O,
     // Inputs
@@ -12,7 +12,33 @@ module mult18x18(/*AUTOARG*/
     output [35:0] O;
 
     /* verilator lint_off PINMISSING */
-    MULT18X18D dsp(
+    MULT18X18D  #(
+    .CLK3_DIV("ENABLED"),
+    .CLK2_DIV("ENABLED"),
+    .CLK1_DIV("ENABLED"),
+    .CLK0_DIV("ENABLED"),
+    .HIGHSPEED_CLK("NONE"),
+    .REG_INPUTC_RST("RST0"),
+    .REG_INPUTC_CE("CE0"),
+    .REG_INPUTC_CLK("NONE"),
+    .SOURCEB_MODE("B_SHIFT"),
+    .MULT_BYPASS("DISABLED"),
+    .CAS_MATCH_REG("FALSE"),
+    .RESETMODE("SYNC"),
+    // .REG_INPUTA_RST("RST0"),
+    // .REG_INPUTA_CE("CE0"),
+    // .REG_INPUTA_CLK("CLK0"),
+    // .REG_INPUTB_RST("RST0"),
+    // .REG_INPUTB_CE("CE0"),
+    // .REG_INPUTB_CLK("CLK0"),
+    // .REG_OUTPUT_RST("RST0"),
+    // .REG_OUTPUT_CE("CE0"),
+    // .REG_OUTPUT_CLK("CLK0"),
+    // .REG_PIPELINE_RST("RST0"),
+    // .REG_PIPELINE_CE("CE0"),
+    // .REG_PIPELINE_CLK("CLK0"),
+    .GSR("DISABLED"))
+dsp_mult_0(
 		 // Outputs
 		 .SROA8			(),
 		 .SROA7			(),
@@ -133,14 +159,14 @@ module mult18x18(/*AUTOARG*/
 		 .B2			(B[2]),
 		 .B1			(B[1]),
 		 .B0			(B[0]),
-		 .C17			(11'b10),
-		 .C16			(11'b10),
-		 .C15			(11'b10),
-		 .C14			(11'b10),
-		 .C13			(11'b10),
-		 .C12			(11'b10),
-		 .C11			(11'b10),
-		 .C10			(11'b10),
+		 .C17			(1'b0),
+		 .C16			(1'b0),
+		 .C15			(1'b0),
+		 .C14			(1'b0),
+		 .C13			(1'b0),
+		 .C12			(1'b0),
+		 .C11			(1'b0),
+		 .C10			(1'b0),
 		 .C9			(1'b0),
 		 .C8			(1'b0),
 		 .C7			(1'b0),
@@ -151,8 +177,8 @@ module mult18x18(/*AUTOARG*/
 		 .C2			(1'b0),
 		 .C1			(1'b0),
 		 .C0			(1'b0),
-		 .SIGNEDA		(1'B0),
-		 .SIGNEDB		(1'B0),
+		 .SIGNEDA		(1'B1),
+		 .SIGNEDB		(1'B1),
 		 .SOURCEA		(1'B0),
 		 .SOURCEB		(1'B0),
 		 .CE0			(en),
