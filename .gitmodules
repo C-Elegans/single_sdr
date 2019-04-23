@@ -1,3 +1,3 @@
 [submodule "dblclockfft"]
 	path = dblclockfft
-	url = git@github.com:ZipCPU/dblclockfft.git
+	url = git@github.com:C-Elegans/dblclockfft.git
