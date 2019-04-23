@@ -4,3 +4,11 @@ target/*
 tmp/*
 *.log
 *~
+*.hex
+diamond/
+lattice_models/
+Top.v
+*.json
+*_out.config
+*.svf
+*.bit
