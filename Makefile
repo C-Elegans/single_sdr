@@ -18,7 +18,7 @@ gen-fft: dblclkfft/sw/fftgen
 	cp fft-core/*.hex ./
 
 Top_out.config: Top.json
-	nextpnr-ecp5 --json Top.json --basecfg /usr/local/share/trellis/misc/basecfgs/empty_lfe5um5g-85f.config --textcfg Top_out.config --um5g-85k --package CABGA381
+	nextpnr-ecp5 --json Top.json --basecfg /usr/local/share/trellis/misc/basecfgs/empty_lfe5u-45f.config --textcfg Top_out.config --45k --package CABGA381 --freq 100
 
 Top.json: Top.v $(FFTSRC) $(RTL)
 	yosys -p "synth_ecp5 -json $@"  $^

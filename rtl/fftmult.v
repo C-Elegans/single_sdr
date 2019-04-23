@@ -1,9 +1,10 @@
-module fftmult(clk, a, b, o);
+module fftmult(clk, rst, a, b, o);
    parameter CWIDTH = 18;
    parameter IWIDTH = 18;
    parameter CREP = 18-(CWIDTH - 1);
    parameter IREP = 18-(CWIDTH - 1);
    input clk;
+   input rst;
    input signed [(CWIDTH-1):0] a;
    input signed [(IWIDTH-1):0] b;
    output signed [((IWIDTH+1)+CWIDTH-1):0] o;
@@ -16,13 +17,13 @@ module fftmult(clk, a, b, o);
    // assign o = a_wire*b_wire;
    // always @(a,b,o)
    //   $display("%d * %d = %d", a, b, o);
-   mult18x18_0c mult(
+   mult18x18_1c mult(
    		     // Outputs
    		     .O			(o),
    		     // Inputs
    		     .clk		(clk),
    		     .en		(1'b1),
-   		     .rst		(1'b0),
+   		     .rst		(rst),
    		     .A			(a_wire),
    		     .B			(b_wire));
 endmodule // fftmult
