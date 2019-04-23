@@ -15,7 +15,7 @@ class mult18x18_0c extends BlackBox {
   mapClockDomain(clock=io.clk, reset=io.rst)
   noIoPrefix()
   addRTLPath("rtl/mult18x18_0c.v")
-  addRTLPath("rtl/MULT18X18D.v")
+  addRTLPath("sim/MULT18X18D.v")
 }
 
 class mult18x18_1c extends BlackBox {
@@ -30,7 +30,7 @@ class mult18x18_1c extends BlackBox {
   mapClockDomain(clock=io.clk, reset=io.rst)
   noIoPrefix()
   addRTLPath("rtl/mult18x18_1c.v")
-  addRTLPath("rtl/MULT18X18D.v")
+  addRTLPath("sim/MULT18X18D.v")
 }
 
 class mult18x18_2c extends BlackBox {
@@ -45,7 +45,7 @@ class mult18x18_2c extends BlackBox {
   mapClockDomain(clock=io.clk, reset=io.rst)
   noIoPrefix()
   addRTLPath("rtl/mult18x18_2c.v")
-  addRTLPath("rtl/MULT18X18D.v")
+  addRTLPath("sim/MULT18X18D.v")
 }
 
 class mult18x18_3c extends BlackBox {
@@ -60,5 +60,5 @@ class mult18x18_3c extends BlackBox {
   mapClockDomain(clock=io.clk, reset=io.rst)
   noIoPrefix()
   addRTLPath("rtl/mult18x18_3c.v")
-  addRTLPath("rtl/MULT18X18D.v")
+  addRTLPath("sim/MULT18X18D.v")
 }
