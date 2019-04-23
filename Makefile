@@ -14,7 +14,7 @@ dblclkfft/sw/fftgen:
 
 gen-fft: dblclkfft/sw/fftgen
 	mkdir -p fft-core
-	./dblclockfft/sw/fftgen -d fft-core -f 256 -1 -n 12 -x 2 -c 0 -p 30
+	./dblclockfft/sw/fftgen -d fft-core -f 256 -1 -n 12 -x 0 -c 0 -m 18 -p 30 -u
 	cp fft-core/*.hex ./
 
 Top_out.config: Top.json
