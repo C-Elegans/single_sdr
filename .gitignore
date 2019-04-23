@@ -12,3 +12,4 @@ Top.v
 *_out.config
 *.svf
 *.bit
+fft-core
